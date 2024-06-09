@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+    app:
+        build:
+            context: ./docker/services/app
+            dockerfile: Dockerfile
+        image: pvcm:app
+        container_name: pvcm-app
+        restart: unless-stopped
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        networks:
+            - pvcm
+
+    nginx:
+        image: nginx:alpine
+        container_name: pvcm-nginx
+        restart: unless-stopped
+        ports:
+            - 8000:80
+        volumes:
+            - ./:/var/www
+            - ./docker/services/nginx/conf.d:/etc/nginx/conf.d/
+        networks:
+            - pvcm
+
+    mysql:
+        image: mysql:8.0
+        container_name: pvcm-mysql
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - ./docker/volumes/mysql:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        networks:
+            - pvcm
+
+    redis:
+        image: redis:alpine
+        container_name: pvcm-redis
+        restart: unless-stopped
+        volumes:
+            - ./docker/volumes/redis:/data
+        ports:
+            - "6379:6379"
+        networks:
+            - pvcm
+
+networks:
+  pvcm:
+    driver: bridge
