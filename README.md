@@ -1,22 +1,33 @@
 # Personalized Video Campaign Manager
 
 ## Project Setup
-Copy the example env file.  
-`cp .env.example .env`
+Copy the example env file.
+```
+cp .env.example .env
+```
 
-Set terminal env vars for docker-compose.<br/>
-`export USER="$(whoami)"`<br/>
-`export UID="$(id -u)"`<br/>
+Set terminal env vars for docker-compose.
+```
+export USER="$(whoami)"
+export UID="$(id -u)"
+```
 This ensures that the files will be writable from inside docker.
 
 Start docker containers.
-`docker-compose up -d`
+```
+docker-compose up -d
+```
 
 Install Composer dependencies.  
-`docker-compose exec app composer install`
+```
+docker-compose exec app composer install
+```
 
 Run database migrations.
-`docker-compose exec app php artisan migrate --seed`  
+```
+docker-compose exec app php artisan migrate --seed
+```
+
 This will create the database tables and also insert a test client with id = 1.
 
 You should now be able to access the site in your browser at http://localhost:8000.   
