@@ -15,7 +15,6 @@ RUN apt-get update  \
         vim \
         nano \
         libonig-dev  \
-        supervisor \
     && apt-get clean && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install mbstring \
     && docker-php-ext-install bcmath \

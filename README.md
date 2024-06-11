@@ -1,26 +1,95 @@
+
 # Personalized Video Campaign Manager
 
 ## Project Setup
-Copy the example env file
+Copy the example env file  
 `cp .env.example .env`
 
-Start docker containers
+Set terminal env vars for docker-compose
+`export USER="$(whoami)"`
+`export UID="$(id -u)"`
+This ensures that the files will be writable from inside docker.
+
+Start docker containers  
 `docker-compose up -d`
 
-Install dependencies
+Install Composer dependencies  
 `docker-compose exec app composer install`
 
-Fix storage director ownership
-`docker-compose exec app chown -R www-data:www-data /var/www/storage`
-
-Run database migrations
-`docker-compose exec app php artisan migrate --seed`
+Run database migrations  
+`docker-compose exec app php artisan migrate --seed`  
 This will create the database tables and also insert a test client with id = 1
 
-You should now be able to access the API documentation at http://localhost:8000. 
-The page should just show the Laravel version. e.g. `{"Laravel":"11.10.0"}` 
+You should now be able to access the site in your browser at http://localhost:8000.   
+The page should show the Laravel version. e.g. `{"Laravel":"11.10.0"}`
 
 ## API Documentation
+#### POST /api/campaigns
+Example request:
+```
+curl --request POST \
+  --url http://localhost:8000/api/campaign \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"client_id": 1,
+	"name": "Test Campaign One",
+	"start_date": "2024-06-10",
+	"end_date": "2024-06-30"
+}
+```
+Example Response:
+```
+HTTP Code: 201 Created
+{
+	"data": {
+		"id": 22,
+		"client_id": "1",
+		"name": "Test Campaign One",
+		"start_date": "2024-06-10",
+		"end_date": "2024-06-30"
+	}
+}
+```
+#### POST /api/campaigns/{campaignId}/data
+Example Request:
+```
+curl --request POST \
+  --url http://localhost:8000/api/campaign/1/data \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"data": [
+		{
+			"user_id": "one@test.test",
+			"video_url": "https://test.test.io/one",
+			"custom_fields": "{\"title\": \"One\"}"
+		},
+		{
+			"user_id": "two@test.test",
+			"video_url": "https://test.test.io/two",
+			"custom_fields": "{\"title\": \"Two\"}"
+		},
+		{
+			"user_id": "three@test.test",
+			"video_url": "https://test.test.io/three",
+			"custom_fields": "{\"title\": \"Three\"}"
+		}
+	]
+}'
+```
+Example Response:
+```
+HTTP Code: 202 Accepted
+{
+	"data": {
+		"message": "Request Accepted"
+	}
+}
+```
 
 
 ## Background Jobs
+When calling the **POST /api/campaigns/{campaignId}/data** endpoint, messages are written to the default queue. The `pvcm-queue` container included in the `docker-compose.yml` file automatically processes this queue by running the `php artisan queue:work` command. So you don't need to run this manually.
+
+For production workloads, you'd likely want multiple queue workers running in parallel.

@@ -17,6 +17,19 @@ services:
         networks:
             - pvcm
 
+    queue:
+        image: pvcm:app
+        container_name: pvcm-queue
+        restart: always
+        working_dir: /var/www/
+        command: php artisan queue:work
+        depends_on:
+            - app
+        volumes:
+            - ./:/var/www
+        networks:
+            - pvcm
+
     nginx:
         image: nginx:alpine
         container_name: pvcm-nginx
