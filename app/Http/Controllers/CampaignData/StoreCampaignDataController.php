@@ -15,7 +15,7 @@ class StoreCampaignDataController extends Controller
     {
         $campaign = Campaign::whereId($campaignId)->first();
         if ($campaign === null) {
-            return new JsonResponse(['data' => ['message' => "Campaign with ID {$campaignId} not found."]], 404);
+            return new JsonResponse(['message' => "Campaign with ID {$campaignId} not found."], 404);
         }
 
         foreach ($request->data as $data) {
@@ -27,6 +27,6 @@ class StoreCampaignDataController extends Controller
             ));
         }
 
-        return new JsonResponse(['data' => ['message' => 'Request Accepted']], 202);
+        return new JsonResponse(['message' => 'Request Accepted'], 202);
     }
 }

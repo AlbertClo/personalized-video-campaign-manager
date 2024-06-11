@@ -28,53 +28,51 @@ The page should show the Laravel version. e.g. `{"Laravel":"11.10.0"}`
 Example request:
 ```
 curl --request POST \
-  --url http://localhost:8000/api/campaign \
-  --header 'Accept: application/json' \
-  --header 'Content-Type: application/json' \
-  --data '{
-	"client_id": 1,
-	"name": "Test Campaign One",
-	"start_date": "2024-06-10",
-	"end_date": "2024-06-30"
+    --url http://localhost:8000/api/campaign \
+    --header 'Accept: application/json' \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "client_id": 1,
+        "name": "Test Campaign One",
+        "start_date": "2024-06-10",
+        "end_date": "2024-06-30"
 }
 ```
 Example Response:
 ```
 HTTP Code: 201 Created
 {
-	"data": {
-		"id": 22,
-		"client_id": "1",
-		"name": "Test Campaign One",
-		"start_date": "2024-06-10",
-		"end_date": "2024-06-30"
-	}
+    "id": 22,
+    "client_id": "1",
+    "name": "Test Campaign One",
+    "start_date": "2024-06-10",
+    "end_date": "2024-06-30"
 }
 ```
 #### POST /api/campaigns/{campaignId}/data
 Example Request:
 ```
 curl --request POST \
-  --url http://localhost:8000/api/campaign/1/data \
-  --header 'Accept: application/json' \
-  --header 'Content-Type: application/json' \
-  --data '{
-	"data": [
-		{
-			"user_id": "one@test.test",
-			"video_url": "https://test.test.io/one",
-			"custom_fields": "{\"title\": \"One\"}"
-		},
-		{
-			"user_id": "two@test.test",
-			"video_url": "https://test.test.io/two",
-			"custom_fields": "{\"title\": \"Two\"}"
-		},
-		{
-			"user_id": "three@test.test",
-			"video_url": "https://test.test.io/three",
-			"custom_fields": "{\"title\": \"Three\"}"
-		}
+    --url http://localhost:8000/api/campaign/1/data \
+    --header 'Accept: application/json' \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "data": [
+            {
+                "user_id": "one@test.test",
+                "video_url": "https://test.test.io/one",
+                "custom_fields": "{\"title\": \"One\"}"
+            },
+            {
+                "user_id": "two@test.test",
+                "video_url": "https://test.test.io/two",
+                "custom_fields": "{\"title\": \"Two\"}"
+            },
+            {
+                "user_id": "three@test.test",
+                "video_url": "https://test.test.io/three",
+                "custom_fields": "{\"title\": \"Three\"}"
+            }
 	]
 }'
 ```
@@ -82,9 +80,7 @@ Example Response:
 ```
 HTTP Code: 202 Accepted
 {
-	"data": {
-		"message": "Request Accepted"
-	}
+    "message": "Request Accepted"
 }
 ```
 
