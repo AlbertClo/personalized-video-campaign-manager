@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Campaign;
+use App\Models\CampaignData;
 use App\Models\Client;
 use Tests\TestCase;
 
@@ -17,6 +18,7 @@ class StoreCampaignTest extends TestCase
         ], uniqueBy: ['id'], update: ['name']);
 
         Campaign::truncate();
+        CampaignData::truncate();
     }
 
     public function test_can_store_campaign(): void
@@ -37,6 +39,7 @@ class StoreCampaignTest extends TestCase
             "name" => "Campaign One",
             "start_date" => "2024-01-01",
             "end_date" => "2025-01-01",
+            'campaign_data' => [],
         ]);
     }
 
@@ -57,6 +60,7 @@ class StoreCampaignTest extends TestCase
             "name" => "Campaign One",
             "start_date" => "2024-01-01",
             "end_date" => null,
+            'campaign_data' => [],
         ]);
     }
 

@@ -1,13 +1,12 @@
-
 # Personalized Video Campaign Manager
 
 ## Project Setup
 Copy the example env file.  
 `cp .env.example .env`
 
-Set terminal env vars for docker-compose.
-`export USER="$(whoami)"`
-`export UID="$(id -u)"`
+Set terminal env vars for docker-compose.<br/>
+`export USER="$(whoami)"`<br/>
+`export UID="$(id -u)"`<br/>
 This ensures that the files will be writable from inside docker.
 
 Start docker containers.
@@ -36,7 +35,7 @@ curl --request POST \
         "name": "Test Campaign One",
         "start_date": "2024-06-10",
         "end_date": "2024-06-30"
-}
+}'
 ```
 Example Response:
 ```
@@ -46,7 +45,8 @@ HTTP Code: 201 Created
     "client_id": "1",
     "name": "Test Campaign One",
     "start_date": "2024-06-10",
-    "end_date": "2024-06-30"
+    "end_date": "2024-06-30",
+    "campaign_data": [],
 }
 ```
 #### POST /api/campaigns/{campaignId}/data
@@ -83,7 +83,45 @@ HTTP Code: 202 Accepted
     "message": "Request Accepted"
 }
 ```
-
+#### GET /api/campaigns/{campaignId}
+Example request:
+```
+curl --request GET \
+    --url http://localhost:8000/api/campaign/1 \
+    --header 'Accept: application/json' \
+    --header 'Content-Type: application/json' 
+```
+Example Response:
+```
+HTTP Code: 200 OK
+{
+	"id": 1,
+	"client_id": 1,
+	"name": "Test Campaign One",
+	"start_date": "2024-06-10",
+	"end_date": null,
+	"campaign_data": [
+		{
+			"id": 1,
+			"user_id": "one@test.test",
+			"video_url": "https:\/\/test.test.io\/one",
+			"custom_fields": "{\"title\": \"One\"}"
+		},
+		{
+			"id": 2,
+			"user_id": "two@test.test",
+			"video_url": "https:\/\/test.test.io\/two",
+			"custom_fields": "{\"title\": \"Two\"}"
+		},
+		{
+			"id": 3,
+			"user_id": "three@test.test",
+			"video_url": "https:\/\/test.test.io\/three",
+			"custom_fields": "{\"title\": \"Three\"}"
+		}
+	]
+}
+```
 
 ## Background Jobs
 When calling the **POST /api/campaigns/{campaignId}/data** endpoint, messages are written to the default queue. The `pvcm-queue` container included in the `docker-compose.yml` file automatically processes this queue by running the `php artisan queue:work` command. So you don't need to run this manually.
