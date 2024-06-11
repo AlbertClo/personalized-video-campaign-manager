@@ -2,26 +2,26 @@
 # Personalized Video Campaign Manager
 
 ## Project Setup
-Copy the example env file  
+Copy the example env file.  
 `cp .env.example .env`
 
-Set terminal env vars for docker-compose
+Set terminal env vars for docker-compose.
 `export USER="$(whoami)"`
 `export UID="$(id -u)"`
 This ensures that the files will be writable from inside docker.
 
-Start docker containers  
+Start docker containers.
 `docker-compose up -d`
 
-Install Composer dependencies  
+Install Composer dependencies.  
 `docker-compose exec app composer install`
 
-Run database migrations  
+Run database migrations.
 `docker-compose exec app php artisan migrate --seed`  
-This will create the database tables and also insert a test client with id = 1
+This will create the database tables and also insert a test client with id = 1.
 
 You should now be able to access the site in your browser at http://localhost:8000.   
-The page should show the Laravel version. e.g. `{"Laravel":"11.10.0"}`
+The page should show the Laravel version. e.g. `{"Laravel":"11.10.0"}`.
 
 ## API Documentation
 #### POST /api/campaigns
@@ -89,3 +89,7 @@ HTTP Code: 202 Accepted
 When calling the **POST /api/campaigns/{campaignId}/data** endpoint, messages are written to the default queue. The `pvcm-queue` container included in the `docker-compose.yml` file automatically processes this queue by running the `php artisan queue:work` command. So you don't need to run this manually.
 
 For production workloads, you'd likely want multiple queue workers running in parallel.
+
+## Tests
+Run automated tests.
+`docker-compose exec app php artisan test`
